@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title></title>
+    <style>
+        :root{
+            --bg1:#ffdde1;
+            --bg2:#ee9ca7;
+        }
+        html,body{
+            height:100%;
+            margin:0;
+            font-family: "Segoe UI", Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg,var(--bg1),var(--bg2));
+            overflow:hidden;
+        }
+
+        .heart{
+            --s:40px;               
+            --color:#e74c6b;        
+            width: var(--s);
+            height: var(--s);
+            position: absolute;
+            transform: rotate(-45deg);
+            background: var(--color);
+            border-radius: 0;
+            will-change: transform, opacity;
+            filter: drop-shadow(0 6px 8px rgba(0,0,0,0.12));
+            animation: floatY linear infinite;
+            opacity: 0.95;
+        }
+        .heart::before,
+        .heart::after{
+            content: "";
+            position: absolute;
+            width: var(--s);
+            height: var(--s);
+            background: inherit;
+            border-radius: 50%;
+            left: 0;
+            top: 0;
+            z-index: 0; 
+        }
+        .heart::before{ top: calc(-0.5 * var(--s)); left: 0; }
+        .heart::after { left: calc(0.5 * var(--s)); top: 0; }
+
+        
+        @keyframes floatY{
+            0%   { transform: rotate(-45deg) translateY(0px) rotate(0deg); }
+            50%  { transform: rotate(-45deg) translateY(-12px) rotate(2deg); }
+            100% { transform: rotate(-45deg) translateY(0px) rotate(0deg); }
+        }
+
+        
+        .center{
+            --s:220px;
+            position: absolute;
+            left:50%;
+            top:50%;
+            transform: translate(-50%,-50%) rotate(-45deg);
+            z-index:100;
+            animation: pulse 1600ms ease-in-out infinite;
+            --color: #ff3b6b;
+            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.18));
+            opacity: 1;
+        }
+        @keyframes pulse{
+            0%   { transform: translate(-50%,-50%) rotate(-45deg) scale(1); }
+            50%  { transform: translate(-50%,-50%) rotate(-45deg) scale(1.06); }
+            100% { transform: translate(-50%,-50%) rotate(-45deg) scale(1); }
+        }
+
+    
+        .center span{
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+            width:100%;
+            height:100%;
+            transform: rotate(45deg); 
+            font-size: 6.8rem;
+            font-weight:800;
+            color:white;
+            user-select:none;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.25);
+            letter-spacing: -4px;
+            position: relative; 
+            z-index: 101; 
+        }
+
+        
+        @media (max-width:480px){
+            .center{ --s:140px; }
+            .center span{ font-size:3.6rem; }
+        }
+    </style>
+</head>
+<body>
+    <script>
+        
+        const COUNT = 90; 
+        const colors = ["#ff6b81","#ff4d6d","#ff7aa2","#ff8fa3","#ff5c8a","#ff2d6f","#ff7fb1"];
+
+        const vw = () => Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+        const vh = () => Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
+
+        function rand(min, max){ return Math.random()*(max-min)+min; }
+        function randInt(min,max){ return Math.floor(rand(min,max+1)); }
+
+    
+        for(let i=0;i<COUNT;i++){
+            const el = document.createElement('div');
+            el.className = 'heart';
+            
+            const size = randInt(12, 48);
+            el.style.setProperty('--s', size + 'px');
+            
+            el.style.setProperty('--color', colors[randInt(0, colors.length-1)]);
+        
+            const left = rand(-5, 105);
+            const top  = rand(0, 100);
+            el.style.left = left + 'vw';
+            el.style.top  = top + 'vh';
+    
+            el.style.animationDuration = rand(1600, 4500) + 'ms';
+            el.style.animationDelay = rand(0, 2000) + 'ms';
+            el.style.opacity = (rand(0.6,1)).toFixed(2);
+          
+            const rot = rand(-10, 10);
+            el.style.transform = `rotate(${rot}deg)`;
+        
+            document.body.appendChild(el);
+        }
+
+        const center = document.createElement('div');
+        center.className = 'heart center';
+        const span = document.createElement('span');
+        span.textContent = 'К';
+        center.appendChild(span);
+        document.body.appendChild(center);
+
+        
+        window.addEventListener('resize', () => {
+           
+        });
+    </script>
+</body>
+</html>
